@@ -210,7 +210,11 @@ python -m http.server 5178
 
 ## 关于作者 · Trans86.com
 
-本项目由 **[Trans86.com](https://trans86.com)** 开发并维护。
+本项目由 **[Trans86.com](https://trans86.com)** 开发并维护，模型广场的扇形卡片设计就来自 Trans86 的首页：
+
+[![Trans86 首页](docs/trans86-home.jpg)](https://trans86.com)
+
+> 💡 如果大家有需求，**Trans86 站点本身（包括上图这套首页设计）也可以开源**，欢迎在 [Issues](https://github.com/TransAPI-eng/new-api-model-plaza/issues) 里留言告诉我们。
 
 **Trans86** 是一个第三方 AI API 中转平台，一个地址统一接入 **Claude / GPT / Gemini** 等模型：
 
