@@ -1,5 +1,5 @@
 /*!
- * new-api-model-plaza v0.1.0 — 给 new-api / one-api 站点换一个好看的模型广场 · MIT License
+ * new-api-model-plaza v0.2.0 — 给 new-api / one-api 站点换一个好看的模型广场 · MIT License
  * https://github.com/TransAPI-eng/new-api-model-plaza · 由 Trans86.com 开发维护
  * 只读取站点公开接口，不改后端、不碰数据库；Shadow DOM 隔离，样式不污染原站。
  *
@@ -23,7 +23,7 @@
 (() => {
   'use strict'
 
-  const VERSION = '0.1.0'
+  const VERSION = '0.2.0'
   const SCRIPT_SRC = document.currentScript && document.currentScript.src
 
   // ---------------------------------------------------------------------------
@@ -514,6 +514,34 @@
   .ctable .cg{font-size:12px;color:var(--ink2);margin-top:2px}
   .ctable .rm{font-size:11px;color:var(--ink3);text-decoration:underline;text-underline-offset:2px;margin-top:6px}
   .scrollx{overflow-x:auto}
+
+  /* ---------- 开通 API Key ---------- */
+  .kicon{width:15px;height:15px;flex:none}
+  .key-cta{display:flex;align-items:center;gap:10px;width:100%;margin:2px 0 12px;padding:12px 16px;border-radius:12px;background:var(--ink);color:var(--bg);font-size:14px;text-align:left;box-shadow:0 12px 28px -18px rgba(20,12,6,.6);transition:transform .15s}
+  .key-cta span{flex:1;min-width:0}
+  .key-cta b{font-weight:400}
+  .key-cta:hover{transform:translateY(-1px)}
+  .key-mini{margin-right:4px}
+  .kdlg{align-items:center}
+  .kcard{width:min(520px,calc(100% - 24px));max-height:88vh;overflow:auto;background:var(--bg);border-radius:18px;padding:20px 20px 22px;box-shadow:0 30px 70px -20px rgba(20,12,6,.55)}
+  .kwhat{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-4px 0 14px;font-size:15px}
+  .kwhat b{font-weight:500;overflow-wrap:anywhere}
+  .kp{margin:0 0 12px;font-size:14px;line-height:1.6}
+  .kp.sub{color:var(--ink2);font-size:13px;margin-top:14px}
+  .kp.ok{color:var(--save)}
+  .kp.err{color:var(--dear)}
+  .kbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .kbtn{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:10px;border:1px solid var(--line-strong);background:var(--card-solid);color:var(--ink);font-size:14px;text-decoration:none;cursor:pointer}
+  .kbtn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .kbtn:disabled{opacity:.6;cursor:default}
+  .kfield{display:grid;gap:6px;font-size:13px;color:var(--ink2);margin-bottom:10px}
+  .kfield input{height:38px;border-radius:10px;border:1px solid var(--line-strong);background:var(--card-solid);padding:0 12px;font:inherit;font-size:14px;color:var(--ink);outline:none}
+  .kfield input:focus{border-color:var(--ink3)}
+  .kfacts,.ksteps{margin:0 0 12px;padding-left:20px;font-size:13px;color:var(--ink2);line-height:1.8}
+  .kfacts b,.ksteps b{color:var(--ink);font-weight:500}
+  .krow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;margin-bottom:8px;border-radius:10px;background:var(--card-solid);border:1px solid var(--line)}
+  .krow .kl{font-size:12px;color:var(--ink2);white-space:nowrap}
+  .krow code{font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere;user-select:all}
   .cmp-row .bar{height:6px;border-radius:3px;background:var(--chip);overflow:hidden}
   .cmp-row .bar i{display:block;height:100%;background:var(--glow);border-radius:3px}
   .cmp-row .p{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;font-family:var(--mono);font-size:12.5px}
@@ -634,6 +662,9 @@
   const PIN_ICON =
     '<svg class="pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 6 3 3v2H7v-2l3-3z"/></svg>'
 
+  const KEY_ICON =
+    '<svg class="kicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/></svg>'
+
   const COPY_ICON =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5.5A2.5 2.5 0 0 1 7.5 3H15"/></svg>'
 
@@ -656,6 +687,140 @@
       this._reg = new Map()
       this.editing = false
       this.history = []
+    }
+
+    // ---------- 开通 API Key：选好分组后直接创建，免得跳到后台忘了选哪个 ----------
+    get keyEnabled() {
+      return !this.hasAttribute('no-key')
+    }
+
+    get userId() {
+      if (this.hasAttribute('demo-key')) return 'demo'
+      try {
+        const u = JSON.parse(localStorage.getItem('user') || 'null')
+        return u && u.id ? String(u.id) : ''
+      } catch {
+        return ''
+      }
+    }
+
+    get tokenPage() {
+      if (this.getAttribute('token-page')) return this.getAttribute('token-page')
+      // 新版 New API（v1 起的 React 前端）在 /console/token，老版本在 /token
+      return /^v?1\./.test(this.site.version || '') ? '/console/token' : '/token'
+    }
+
+    keyButton(group, model, big = false) {
+      if (!this.keyEnabled || this.editing) return ''
+      return big
+        ? `<button class="key-cta" data-key-open data-group="${esc(group)}" data-model="${esc(model || '')}">${KEY_ICON}<span>用「${esc(this.chOverride(group).title ?? group)}」分组开通 API Key</span><b>→</b></button>`
+        : `<button class="pick key-mini" data-key-open data-group="${esc(group)}" data-model="${esc(model || '')}" title="用这个分组开通 API Key">${KEY_ICON}开通</button>`
+    }
+
+    openKeyDialog(group, model) {
+      this._key = { group, model, state: this.userId ? 'form' : 'login', name: (model || group).slice(0, 50) }
+      this.renderKeyDialog()
+    }
+
+    renderKeyDialog() {
+      const k = this._key
+      const dlg = this.root.querySelector('.kdlg')
+      if (!k || !dlg) return
+      const title = this.chOverride(k.group).title ?? k.group
+      const origin = location.origin
+      const copyRow = (label, value) =>
+        `<div class="krow"><span class="kl">${label}</span><code>${esc(value)}</code><button class="tl" data-copy="${esc(value)}">复制</button></div>`
+      const manual = `<ol class="ksteps">
+          <li>进入「令牌管理」，点「添加令牌」</li>
+          <li>分组选择 <b>${esc(k.group)}</b>（已复制到剪贴板）</li>
+          <li>保存后复制 Key，填进你的客户端</li>
+        </ol>`
+      let body = ''
+      if (k.state === 'login') {
+        body = `<p class="kp">登录后才能创建 API Key。登录完回到这个页面，再点一次「开通」即可一键创建。</p>
+          <div class="kbtns"><a class="kbtn primary" href="${esc(this.getAttribute('login-page') || '/login')}">登录</a><a class="kbtn" href="${esc(this.getAttribute('register-page') || '/register')}">注册</a></div>
+          <p class="kp sub">也可以手动创建：</p>${manual}`
+      } else if (k.state === 'form' || k.state === 'busy') {
+        body = `<label class="kfield"><span>Key 名称</span><input class="kname" maxlength="50" value="${esc(k.name)}"></label>
+          <ul class="kfacts"><li>分组：<b>${esc(k.group)}</b></li><li>不限额度、永不过期，可调用该分组的全部模型</li><li>之后可以在「令牌管理」里修改或删除</li></ul>
+          <div class="kbtns"><button class="kbtn primary" data-key-create ${k.state === 'busy' ? 'disabled' : ''}>${k.state === 'busy' ? '正在创建…' : '一键创建'}</button><a class="kbtn" href="${esc(this.tokenPage)}">去令牌管理</a></div>`
+      } else if (k.state === 'done') {
+        body = `<p class="kp ok">✓ 已创建，复制下面的信息填进客户端：</p>
+          ${copyRow('API Key', k.key)}
+          ${copyRow('OpenAI 兼容地址', origin + '/v1')}
+          ${copyRow('Claude Code 地址', origin)}
+          <p class="kp sub">之后也可以随时到「令牌管理」查看这个 Key。</p>
+          <div class="kbtns"><a class="kbtn" href="${esc(this.tokenPage)}">去令牌管理</a><button class="kbtn" data-key-close>完成</button></div>`
+      } else if (k.state === 'error') {
+        body = `<p class="kp err">创建失败：${esc(k.error)}</p><p class="kp sub">可以手动创建：</p>${manual}
+          <div class="kbtns"><a class="kbtn primary" href="${esc(this.tokenPage)}">去令牌管理</a><button class="kbtn" data-key-retry>重试</button></div>`
+      }
+      dlg.innerHTML = `<div class="kcard" role="dialog" aria-modal="true" aria-label="开通 API Key">
+        <div class="sheet-hd"><h3>开通 API Key</h3><button class="x" data-key-close aria-label="关闭">✕</button></div>
+        <div class="kwhat"><span class="tag hot">分组</span><b>${esc(title)}</b>${k.model ? `<span class="count">模型 ${esc(k.model)}</span>` : ''}</div>
+        ${body}</div>`
+      dlg.classList.add('show')
+      if (k.state === 'login' || k.state === 'error') navigator.clipboard && navigator.clipboard.writeText(k.group).catch(() => {})
+    }
+
+    closeKeyDialog() {
+      this._key = null
+      const dlg = this.root.querySelector('.kdlg')
+      if (dlg) dlg.classList.remove('show')
+    }
+
+    /** 调 New API 的令牌接口创建 Key（当前登录用户自己点的，同域请求） */
+    async createKey() {
+      const k = this._key
+      const input = this.root.querySelector('.kname')
+      k.name = ((input && input.value.trim()) || k.model || k.group).slice(0, 50)
+      k.state = 'busy'
+      this.renderKeyDialog()
+      if (this.hasAttribute('demo-key')) {
+        await new Promise((r) => setTimeout(r, 500))
+        k.key = 'sk-demo' + Math.random().toString(36).slice(2, 12) + '（演示用，不能真实调用）'
+        k.state = 'done'
+        return this.renderKeyDialog()
+      }
+      const api = (this.getAttribute('token-api') || '/api/token/').replace(/\/?$/, '/')
+      const headers = { 'Content-Type': 'application/json', 'New-Api-User': this.userId }
+      const call = async (url, opts = {}) => {
+        const r = await fetch(url, { credentials: 'include', headers, ...opts })
+        const j = await r.json().catch(() => null)
+        if (!r.ok || !j || j.success === false) throw new Error((j && j.message) || 'HTTP ' + r.status)
+        return j
+      }
+      try {
+        await call(api, {
+          method: 'POST',
+          body: JSON.stringify({
+            name: k.name,
+            group: k.group,
+            remain_quota: 0,
+            unlimited_quota: true,
+            expired_time: -1,
+            model_limits_enabled: false,
+            model_limits: ''
+          })
+        })
+        // 新版创建接口不返回 Key：取最新的同名同分组令牌，再取完整 Key；老版本列表里直接是完整 Key
+        const list = await call(api + '?p=1&page_size=20')
+        const items = Array.isArray(list.data) ? list.data : (list.data && list.data.items) || []
+        const tok = items.filter((t) => t.name === k.name && (t.group || '') === k.group).sort((a, b) => b.id - a.id)[0]
+        if (!tok) throw new Error('已创建，但没找到新令牌，请到令牌管理查看')
+        let key = tok.key && !/\*/.test(tok.key) ? tok.key : ''
+        if (!key) {
+          const full = await call(api + tok.id + '/key', { method: 'POST' })
+          key = full.data && full.data.key
+        }
+        if (!key) throw new Error('已创建，但取不到完整 Key，请到令牌管理查看')
+        k.key = key.startsWith('sk-') ? key : 'sk-' + key
+        k.state = 'done'
+      } catch (e) {
+        k.state = 'error'
+        k.error = e.message
+      }
+      this.renderKeyDialog()
     }
 
     // ---------- 可视化编辑 ----------
@@ -1205,6 +1370,7 @@
         </div>
         <div class="tray" aria-live="polite"></div>
         <div class="dlg"></div>
+        <div class="dlg kdlg"></div>
         ${this.editBar()}
         <div class="toast" role="status"></div>`
       this.layoutFan()
@@ -1429,6 +1595,7 @@
                 open
                   ? `<ul class="tree"><li>
                       ${ed && c.custom ? this.pickerPanel(v, c) : ''}
+                      ${!c.custom ? this.keyButton(c.id, '', true) : ''}
                       ${items.length ? `<div class="models">${shown.map((it) => this.modelCard(it.m, it.c, { via: c })).join('')}</div>` : `<p class="empty">${c.custom ? '这个分组还没有模型，点上方「添加模型」挑选' : '没有模型'}</p>`}${
                       shown.length < items.length ? `<button class="more" data-more>展开全部 ${items.length} 个模型</button>` : ''
                     }</li></ul>`
@@ -1554,7 +1721,7 @@
       return `<div class="mc ${c && this.picks.has(key) ? 'picked' : ''} ${meta.featured ? 'featured' : ''} ${meta.hidden ? 'is-hidden' : ''}">
         ${ed ? `<div class="mtools">${tool('card-feature', meta.featured ? '★ 取消推荐' : '☆ 推荐')}${meta.note || this._noteOpen === key ? '' : tool('card-note', '✎ 备注')}${tool('card-hide', meta.hidden ? '◉ 显示' : '◌ 隐藏')}${opts.via && opts.via.custom ? tool('card-remove', '✕ 移出分组') : ''}${meta.hidden ? '<span class="hid-label">已隐藏</span>' : ''}</div>` : ''}
         <div class="hd"><div class="n">${meta.featured ? '<span class="star">★ 推荐</span>' : ''}${esc(m.name)}<span class="v">${esc(m.vendor)}${m.endpoints.length ? ' · ' + m.endpoints.map(esc).join(', ') : ''}</span></div>
-          ${c ? this.pickButton(m, c) : ''}<button class="copy" data-copy="${esc(m.name)}" aria-label="复制模型名">${COPY_ICON}</button></div>
+          ${c ? this.keyButton(c.id, m.name) + this.pickButton(m, c) : ''}<button class="copy" data-copy="${esc(m.name)}" aria-label="复制模型名">${COPY_ICON}</button></div>
         ${ed ? this.editableText(meta.desc || '', 'card.desc', key, '一句话介绍这个模型（可选）', 'div', 'mdesc') : meta.desc ? `<div class="mdesc">${esc(meta.desc)}</div>` : ''}
         <div class="badges"><span class="bill ${m.base.dynamic ? '' : 'flat'}">${m.base.dynamic ? '动态计费' : p.perCall != null ? '按次计费' : '按量计费'}</span>${this.saveBadge(cmp)}${groupLine}${via}</div>
         ${showNote ? `<div class="note">${PIN_ICON}${ed ? this.editableText(meta.note || '', 'card.note', key, '写一条备注，会显示给客户', 'span', 'note-text') : `<span>${esc(meta.note)}</span>`}</div>` : ''}
@@ -1696,11 +1863,19 @@
       const r = this.root
       r.addEventListener('click', (e) => {
         const t = e.target.closest(
-          '[data-act],[data-cur],[data-i],[data-go],[data-view],[data-sort],[data-open],[data-more],[data-copy],[data-ftoggle],[data-filter],[data-fclear],[data-pick],[data-cmp-open],[data-cmp-close],[data-cmp-clear],[data-unpick]'
+          '[data-key-open],[data-key-create],[data-key-close],[data-key-retry],[data-act],[data-cur],[data-i],[data-go],[data-view],[data-sort],[data-open],[data-more],[data-copy],[data-ftoggle],[data-filter],[data-fclear],[data-pick],[data-cmp-open],[data-cmp-close],[data-cmp-clear],[data-unpick]'
         )
         if (!t) {
-          if (e.target.classList && e.target.classList.contains('dlg')) this.closeCompare()
+          if (e.target.classList && e.target.classList.contains('kdlg')) this.closeKeyDialog()
+          else if (e.target.classList && e.target.classList.contains('dlg')) this.closeCompare()
           return
+        }
+        if (t.dataset.keyOpen != null) return this.openKeyDialog(t.dataset.group, t.dataset.model)
+        if (t.dataset.keyCreate != null) return this.createKey()
+        if (t.dataset.keyClose != null) return this.closeKeyDialog()
+        if (t.dataset.keyRetry != null) {
+          this._key.state = 'form'
+          return this.renderKeyDialog()
         }
         // 编辑模式：点在可编辑文字、输入框上时不展开/收起分组
         if (t.dataset.open != null && e.target.closest('[contenteditable],input,.tools')) return
@@ -1779,7 +1954,10 @@
         }
       })
       window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') this.closeCompare()
+        if (e.key === 'Escape') {
+          this.closeCompare()
+          this.closeKeyDialog()
+        }
         const inField = e.composedPath().some((n) => n.isContentEditable || n.tagName === 'INPUT')
         if (this.editing && !inField && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
           e.preventDefault()
