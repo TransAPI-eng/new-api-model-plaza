@@ -1,7 +1,11 @@
-# Model Plaza · 模型广场
+# New API 模型广场美化 · new-api Model Plaza
 
-给 **new-api / one-api** 中转站换一个好看、好懂的模型广场。
+**给 New API / One API 中转站的模型广场（/pricing 定价页）换一套好看、好懂的界面。**
 一行代码接入，只读公开接口，**不改后端、不碰数据库、不影响原站运营**。
+
+[在线演示](https://transapi-eng.github.io/new-api-model-plaza/) · [快速接入](#快速接入站长) · [管理员编辑](#管理员可视化编辑) · 由 [Trans86.com](https://trans86.com) 开发维护
+
+`new-api` `one-api` `newapi 定价页` `模型广场` `中转站` `API 价格对比` `Claude` `GPT` `Gemini`
 
 ![厂商扇形卡片](docs/hero.jpg)
 
@@ -53,12 +57,12 @@
 
 ```html
 <model-plaza config="/plaza.config.json"></model-plaza>
-<script src="https://cdn.jsdelivr.net/gh/<user>/model-plaza@0/plaza.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TransAPI-eng/new-api-model-plaza@0/plaza.js"></script>
 ```
 
 - `@0` 表示自动使用 0.x 的最新版本；想锁定版本就写 `@0.1.0`，想永远跟最新写 `@main`。
 - 官方价文件 `official.json` 和 `plaza.js` 在同一目录，GitHub 每天自动更新一次，CDN 引用的站点**什么都不用做**就能拿到最新官方价。
-  （锁定具体版本时，官方价会停在那个版本；可以加 `official="https://cdn.jsdelivr.net/gh/<user>/model-plaza@main/official.json"` 单独跟最新。）
+  （锁定具体版本时，官方价会停在那个版本；可以加 `official="https://cdn.jsdelivr.net/gh/TransAPI-eng/new-api-model-plaza@main/official.json"` 单独跟最新。）
 - 用 CDN 时 `config` 要指向你自己站点上的配置文件（见「管理员编辑」）。
 
 ### 方式二：自己托管
@@ -96,7 +100,7 @@ location = /models.html { root  /var/www/model-plaza/examples; }
 
 | 接入方式 | 怎么更新 |
 |---|---|
-| CDN `@0` / `@main` | 自动。jsDelivr 缓存最长约 12 小时，急用可以访问 `https://purge.jsdelivr.net/gh/<user>/model-plaza@0/plaza.js` 刷新 |
+| CDN `@0` / `@main` | 自动。jsDelivr 缓存最长约 12 小时，急用可以访问 `https://purge.jsdelivr.net/gh/TransAPI-eng/new-api-model-plaza@0/plaza.js` 刷新 |
 | CDN 锁定 `@0.1.0` | 把版本号改成新的，例如 `@0.2.0` |
 | 自己托管 | 用新的 `plaza.js` 覆盖旧文件；`official.json` 可以用 cron 每天下载一次 |
 
@@ -106,7 +110,7 @@ location = /models.html { root  /var/www/model-plaza/examples; }
 自己托管时每天更新官方价的 cron 示例：
 
 ```bash
-17 9 * * * curl -fsSL https://cdn.jsdelivr.net/gh/<user>/model-plaza@main/official.json -o /var/www/model-plaza/official.json
+17 9 * * * curl -fsSL https://cdn.jsdelivr.net/gh/TransAPI-eng/new-api-model-plaza@main/official.json -o /var/www/model-plaza/official.json
 ```
 
 ---
@@ -169,6 +173,7 @@ location = /models.html { root  /var/www/model-plaza/examples; }
 | `theme` | 跟随系统 | `light` / `dark` |
 | `save` | 无 | 自定义发布接口（PUT JSON） |
 | `auth` | `/api/user/self` | 管理员身份校验接口 |
+| `no-credit` | 无 | 去掉页脚的「开源模型广场 · by Trans86」署名（欢迎保留 ❤️） |
 
 ---
 
@@ -198,6 +203,24 @@ python -m http.server 5178
 - `.github/workflows/official.yml`：每天自动更新官方价
 
 欢迎提 Issue 和 PR，尤其是官方价匹配规则和渠道特点关键词。
+
+## 关于作者 · Trans86.com
+
+本项目由 **[Trans86.com](https://trans86.com)** 开发并维护。
+
+**Trans86** 是一个第三方 AI API 中转平台，一个地址统一接入 **Claude / GPT / Gemini** 等模型：
+
+- **按量计费，无月费**：用多少付多少，控制台随时查看余额、Token 用量和费用明细。
+- **三步上手**：注册账号 → 创建 API Key → 把站点地址和 Key 填进你常用的工具（Claude Code、Cherry Studio 等）。
+- 首页有各模型的价格卡片和客户端配置教程。
+
+👉 **[trans86.com](https://trans86.com)**
+
+> Trans86 是独立的第三方服务，与 Anthropic、OpenAI、Google 无隶属关系；文中模型名称为其各自所有者的商标。
+
+## 免责声明
+
+本项目是社区开发的前端插件，与 [new-api](https://github.com/QuantumNous/new-api)、[one-api](https://github.com/songquanpeng/one-api) 官方项目无隶属关系，只调用它们的公开接口。价格换算结果仅供参考，以各站点实际扣费为准。
 
 ## License
 

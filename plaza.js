@@ -1,5 +1,6 @@
 /*!
- * model-plaza v0.1.0 — 给 new-api / one-api 站点换一个好看的模型广场 · MIT License
+ * new-api-model-plaza v0.1.0 — 给 new-api / one-api 站点换一个好看的模型广场 · MIT License
+ * https://github.com/TransAPI-eng/new-api-model-plaza · 由 Trans86.com 开发维护
  * 只读取站点公开接口，不改后端、不碰数据库；Shadow DOM 隔离，样式不污染原站。
  *
  * 用法（站长只需两行）：
@@ -581,6 +582,9 @@
   .more:hover{color:var(--ink);border-color:var(--ink3)}
   .empty{color:var(--ink3);font-size:14px;padding:30px 0;text-align:center}
   .foot{margin-top:46px;text-align:center;color:var(--ink3);font-size:12px;line-height:1.9}
+  .credit{margin:10px 0 0;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3)}
+  .credit a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line-strong)}
+  .credit a:hover{color:var(--ink);border-color:var(--ink3)}
   .state{padding:120px 16px;text-align:center;color:var(--ink2)}
   @media (max-width:640px){
     .fan{height:320px}.vc{width:180px;height:262px;margin-left:-90px}.vc .name{font-size:24px}
@@ -1192,6 +1196,7 @@
               ? `「比官方省」= 1 − 实付 ÷ 官方价；实付按本站充值价 ¥${num(this.topup)} = 1 美元额度，官方价按 1 USD = ¥${this.fx}${o && o.fx && o.fx.time && !this.getAttribute('fx') ? `（${esc(new Date(o.fx.time).toISOString().slice(0, 10))} 汇率）` : ''} 换算`
               : '未获取到充值价或汇率，暂不显示与官方的价差'
           }${this.perf.size ? '<br>状态 / 延迟 / 吞吐为该模型近 24 小时全渠道数据' : ''}</p>
+          ${this.hasAttribute('no-credit') ? '' : '<p class="credit"><a href="https://github.com/TransAPI-eng/new-api-model-plaza" target="_blank" rel="noopener">开源模型广场</a> · by <a href="https://trans86.com" target="_blank" rel="noopener">Trans86</a></p>'}
         </div>
         <div class="tray" aria-live="polite"></div>
         <div class="dlg"></div>
