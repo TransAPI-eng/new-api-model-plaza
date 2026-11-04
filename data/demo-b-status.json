@@ -1,0 +1,12 @@
+{
+ "success": true,
+ "data": {
+  "quota_display_type": "CNY",
+  "usd_exchange_rate": 1,
+  "price": 1,
+  "quota_per_unit": 500000,
+  "display_in_currency": true,
+  "custom_currency_symbol": "RMB",
+  "custom_currency_exchange_rate": 1
+ }
+}

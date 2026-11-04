@@ -1,0 +1,33 @@
+# 每天更新一次官方价格和 USD→CNY 汇率（official.json）。
+# 用 CDN 引用 plaza.js 的站点会自动拿到最新的官方价，不用做任何事。
+name: Update official prices
+
+on:
+  schedule:
+    - cron: '17 1 * * *' # 每天 UTC 01:17（北京时间 09:17）
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build official.json
+        run: python tools/build_official.py > official.new.json && mv official.new.json official.json
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- official.json; then
+            echo "官方价没有变化"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add official.json
+          git commit -m "chore: 更新官方价格与汇率"
+          git push

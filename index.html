@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Model Plaza 演示</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#f7f1ea;font-family:system-ui,sans-serif}
+    .demo-bar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;padding:10px 16px;background:rgba(247,241,234,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(42,29,20,.1);font-size:13px;color:#5a4a3e}
+    .demo-bar button{border:1px solid rgba(42,29,20,.18);background:#fffaf5;border-radius:999px;padding:5px 12px;cursor:pointer;font:inherit}
+    .demo-bar button.on{background:#2a1d14;color:#fff;border-color:#2a1d14}
+  </style>
+</head>
+<body>
+  <div class="demo-bar">
+    <span>演示数据（匿名化的示例站点）：</span>
+    <button data-site="demo-a" class="on">示例站 A · 57 模型</button>
+    <button data-site="demo-b">示例站 B · 241 模型</button>
+  </div>
+
+  <!--
+    站长真实接入只需要：
+      <model-plaza></model-plaza>
+      <script src="plaza.js"></script>
+    组件会自己读 /api/pricing、/api/status、/api/perf-metrics/summary 和同目录的 official.json、plaza.config.json。
+
+    这里为了演示，把接口指向本地示例数据。
+    demo-edit 仅本地演示用（让没有登录的人也能试编辑）：生产环境不要加，管理员身份由 new-api 的 /api/user/self 确认。
+  -->
+  <model-plaza demo-edit api="data/demo-a.json" status="data/demo-a-status.json" perf="data/demo-a-perf.json"></model-plaza>
+  <script src="plaza.js"></script>
+
+  <script>
+    const el = document.querySelector('model-plaza')
+    document.querySelectorAll('[data-site]').forEach((b) => b.onclick = () => {
+      document.querySelectorAll('[data-site]').forEach((x) => x.classList.toggle('on', x === b))
+      const s = b.dataset.site
+      el.setAttribute('status', `data/${s}-status.json`)
+      el.setAttribute('perf', `data/${s}-perf.json`)
+      el.setAttribute('api', `data/${s}.json`)
+    })
+  </script>
+</body>
+</html>

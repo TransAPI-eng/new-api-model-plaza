@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "channels": {
+    "default": {
+      "title": "官方直连",
+      "desc": "官方 Key 直连，晚高峰也稳定",
+      "tags": ["官方 Key", "稳定"],
+      "note": "新用户推荐从这里开始"
+    },
+    "test-group": { "hidden": true }
+  },
+  "cards": {
+    "default::claude-opus-5-5": { "featured": true, "desc": "复杂推理与长任务首选" },
+    "default::gpt-4o-audio-preview": { "hidden": true }
+  },
+  "custom": [
+    {
+      "id": "coding",
+      "vendor": "Anthropic",
+      "title": "编程精选",
+      "desc": "适合 Claude Code / Cursor 的组合",
+      "tags": ["推荐"],
+      "note": "",
+      "items": ["default::claude-opus-5-5", "default::claude-sonnet-5-5"]
+    }
+  ],
+  "order": {
+    "Anthropic": ["custom:coding", "default"]
+  }
+}

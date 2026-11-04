@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>模型广场</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>body{margin:0;background:#f7f1ea}@media (prefers-color-scheme:dark){body{background:#17110d}}</style>
+</head>
+<body>
+  <!--
+    放到 new-api 同一个域名下（例如 https://你的站点/models.html），组件会自动读取：
+      /api/pricing                        价格、分组、倍率、动态计费
+      /api/status                         显示币种、充值价
+      /api/perf-metrics/summary?hours=24  成功率、延迟、吞吐（没有就不显示）
+      /api/user/self                      判断当前登录的是不是管理员（是才显示「编辑广场」）
+    以及 plaza.js 同目录的 official.json（官方价）和 plaza.config.json（你在编辑模式里导出的展示配置）。
+  -->
+  <model-plaza></model-plaza>
+  <script src="/plaza/plaza.js"></script>
+</body>
+</html>
