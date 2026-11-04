@@ -376,6 +376,7 @@
   .seg button[aria-pressed=true]{background:var(--card-solid);color:var(--ink);box-shadow:0 1px 3px rgba(40,24,12,.12)}
   .search{height:34px;width:220px;max-width:100%;border-radius:999px;border:1px solid var(--line);background:var(--card);padding:0 14px;font:inherit;font-size:13px;color:var(--ink);outline:none}
   .search:focus{border-color:var(--ink3)}
+  .cur-note{flex-basis:100%;text-align:center;font-size:12px;color:var(--ink2);margin-top:-2px}
 
   /* ---------- 第一层：厂商扇形卡片 ---------- */
   .fan{position:relative;height:360px;margin:34px auto 0;perspective:1400px;touch-action:pan-y;user-select:none;outline:none}
@@ -1104,12 +1105,16 @@
     }
 
     currencySwitch() {
-      const opts = [['USD', '$ 额度'], ...(this.cnyRate() ? [['CNY', '¥ 人民币']] : [])]
+      const opts = [['USD', '$ 额度'], ...(this.cnyRate() ? [['CNY', '¥ 实付']] : [])]
       if (this.site.quota_display_type === 'CUSTOM') opts.push(['CUSTOM', `${esc(this.site.custom_currency_symbol || '¤')} 站点币种`])
       if (opts.length < 2) return ''
-      return `<div class="seg" role="group" aria-label="币种" title="$ 为站点额度；¥ = 额度 × 充值价 ¥${num(this.cnyRate() || 0)}">${opts
+      const r = this.cnyRate()
+      const note = r
+        ? `<span class="cur-note">本站充值 ¥${num(r)} = $1 额度${r === 1 ? '，所以两种显示数字相同' : ''}</span>`
+        : ''
+      return `<div class="seg" role="group" aria-label="币种" title="$ 为站点额度；¥ = 额度 × 充值价 ¥${num(r || 0)}">${opts
         .map(([k, l]) => `<button data-cur="${k}" aria-pressed="${this.cur === k}">${l}</button>`)
-        .join('')}</div>`
+        .join('')}</div>${note}`
     }
 
     money(quota) {
