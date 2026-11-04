@@ -226,6 +226,17 @@ python -m http.server 5178
 
 👉 **[trans86.com](https://trans86.com)**
 
+### 联系我们
+
+接入问题、合作、定制、想要 Trans86 站点开源，都可以找我们，通常几分钟内回复：
+
+| 方式 | 账号 |
+|---|---|
+| 微信 | `66476118` 或 `TransAIAPI` |
+| QQ | `66476118` |
+| 邮箱 | [ljceng@icloud.com](mailto:ljceng@icloud.com) |
+| GitHub | [提 Issue](https://github.com/TransAPI-eng/new-api-model-plaza/issues) |
+
 > Trans86 是独立的第三方服务，与 Anthropic、OpenAI、Google 无隶属关系；文中模型名称为其各自所有者的商标。
 
 ## 免责声明
