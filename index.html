@@ -16,8 +16,8 @@
 <body>
   <div class="demo-bar">
     <span>演示数据（匿名化的示例站点）：</span>
-    <button data-site="demo-a" class="on">示例站 A · 57 模型</button>
-    <button data-site="demo-b">示例站 B · 241 模型</button>
+    <button data-site="demo-a">示例站 A · 57 模型</button>
+    <button data-site="demo-b" class="on">示例站 B · 241 模型</button>
   </div>
 
   <!--
@@ -29,7 +29,7 @@
     这里为了演示，把接口指向本地示例数据。
     demo-edit 仅本地演示用（让没有登录的人也能试编辑）：生产环境不要加，管理员身份由 new-api 的 /api/user/self 确认。
   -->
-  <model-plaza demo-edit api="data/demo-a.json" status="data/demo-a-status.json" perf="data/demo-a-perf.json"></model-plaza>
+  <model-plaza demo-edit api="data/demo-b.json" status="data/demo-b-status.json" perf="data/demo-b-perf.json"></model-plaza>
   <script src="plaza.js"></script>
 
   <script>

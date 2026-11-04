@@ -212,7 +212,9 @@ python -m http.server 5178
 
 本项目由 **[Trans86.com](https://trans86.com)** 开发并维护，模型广场的扇形卡片设计就来自 Trans86 的首页：
 
-[![Trans86 首页](docs/trans86-home.jpg)](https://trans86.com)
+| 首页 | 模型定价 | 简易教程 |
+|---|---|---|
+| [![Trans86 首页](docs/trans86-home.jpg)](https://trans86.com) | [![Trans86 定价](docs/trans86-pricing.jpg)](https://trans86.com/#pricing) | [![Trans86 教程](docs/trans86-tutorial.jpg)](https://trans86.com/#tutorial) |
 
 > 💡 如果大家有需求，**Trans86 站点本身（包括上图这套首页设计）也可以开源**，欢迎在 [Issues](https://github.com/TransAPI-eng/new-api-model-plaza/issues) 里留言告诉我们。
 
